@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/results.css">
+<link rel="stylesheet" href="/static/index.css">
+<script>
+    function seeTable(divId) {
+        document.getElementById("haplotypes").style.display = "none";
+        document.getElementById("haplotypes-pairs").style.display = "none";
+        document.getElementById("genotypes").style.display = "none";
+
+        if(divId == "geno") {
+            document.getElementById("genotypes").style.display = "block";
+        } else if (divId == "hap-s") {
+            document.getElementById("haplotypes").style.display = "block";
+        } else {
+            document.getElementById("haplotypes-pairs").style.display = "block";
+        }
+    }
+</script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    function extractContent(s) {
+        var span = document.createElement('span');
+        span.innerHTML = s;
+        a = span.textContent || span.innerText;
+        a = a.replaceAll(" ", "")
+        a = a.replaceAll("\n", "")
+        return a;
+    }
+
+    function loadDataFromTable(table) {
+        arr = [];
+        for (var i = 0, row; row = table.rows[i]; i++) {
+            rowArr = []
+            for (var j = 0, col; col = row.cells[j]; j++) {
+                x = extractContent(col.innerHTML);
+                if (j != 0 && i != 0)
+                    rowArr.push(parseFloat(x));
+                else {
+                    rowArr.push(x)
+                }
+            }
+            arr.push(rowArr);
+        }
+        return arr;
+    }
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawCharts);
+    function drawCharts() {
+
+        /*
+        The data of the genotypes is already sorted in decreasing order therefore the first element in the visual
+        table is also the first element in the table below.
+        The code here just replaces the data with their corresponding number using and iterator.
+        */
+
+        const drawBarGraph = (tableName, tableBars) => {
+            // The following options object will make it so that the table is drawn with 1 being the value at the
+            // top, and it will make it so that each value gets represented by showing all 10 ticks marks.
+            const options = {
+                title: "",
+                legend: { position: "none" },
+                backgroundColor: { fill:'transparent' },
+                height: 400,
+                hAxis: {
+                    format: 'scientific',
+                },
+                vAxis: {
+                    direction: -1,
+                    ticks: [],
+                },
+            }
+
+            const genotype_table = loadDataFromTable(document.getElementById(tableName));
+            // Convert the data glstrings into 1 through 10 as the table is already sorted from highest to lowest.
+            for (let i = 1; i < Math.min(11, genotype_table.length); i++) {
+                genotype_table[i][0] = i;
+                options.vAxis.ticks.push(i);
+            }
+            const genotype_data = google.visualization.arrayToDataTable(genotype_table);
+            const genotype_view = new google.visualization.DataView(genotype_data);
+            const genotype_chart = new google.visualization.BarChart(document.getElementById(tableBars));
+            genotype_chart.draw(genotype_view, options);
+        };
+
+        // Generates the first table.
+        drawBarGraph("genotype-data-table", "genotype-bars");
+        drawBarGraph("haplotypes-pairs-data-table", "haplotypes-pairs-bars");
+
+        seeTable('geno');
+        seeTable('hap-p');
+    }
+
+    function exportToCsv(tableName) {
+        const table = document.getElementById(tableName);
+        const rows = table.getElementsByTagName("tr");
+        let csvContent = "";
+
+        for (let i = 0; i < rows.length; i++) {
+            const rowData = [];
+            const cells = rows[i].getElementsByTagName("td");
+
+            for (let j = 0; j < cells.length; j++) {
+                rowData.push(cells[j].innerText);
+            }
+
+            csvContent += rowData.join(",") + "\n";
+        }
+
+        const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"});
+        const link = document.createElement("a");
+        if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "table.csv");
+            link.style.visibility = "hidden";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+<div class="page-top">
+    <h1>Results</h1>
+    <h6>{{ glstring }}</h6>
+    <!-- <h6>{{ ard_string }}</h6> -->
+    <div class="middle-div">
+        <!-- ard hla: {{ ard_string }} <br>
+        race: {{ imputration_race }} <br> -->
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-info margin border border-dark" onclick="seeTable('geno')">Genotypes</button>
+            <button type="button" class="btn btn-info margin border border-dark" onclick="seeTable('hap-s')">Haplotypes (separate)</button>
+            <button type="button" class="btn btn-info margin border border-dark" onclick="seeTable('hap-p')">Haplotypes (pairs)</button>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div style="display: none;">
+    <table id="genotype-data-table">
+        <tr>
+            <td>Genotype</td>
+            <td>Genotype Frequency</td>
+        </tr>
+        {% for gen in genotypes %}
+            <tr>
+                <td>{{ gen[1] }}</td>
+                <td>{{ gen[2] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <table id="haplotypes-pairs-data-table">
+        <tr>
+            <td>haplotypes</td>
+            <td>Score</td>
+        </tr>
+        {% for haps in haplotypes_pairs %}
+            <tr>
+                <td>{{ haps[1] }}, {{ haps[2] }}</td>
+                <!-- <td>{{ haps[1] }}</td> -->
+                <td>{{ haps[3] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="main-results">
+    <div class="results-div" id="haplotypes" style="display: none;">
+        <button type="button" class="btn btn-secondary border border-dark" onclick="exportToCsv('haplotypes-table')">Export to CSV</button>
+        <table id="haplotypes-table" class="table results-table table-striped">
+            <tr>
+                <th></th>
+                <th>Haplotype</th>
+                {% for race in races %}
+                    <th>{{ race }}</th>
+                {% endfor %}
+            </tr>
+            {% for hap in haplotypes %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ hap }}</td>
+                {% for race in races %}
+                    {% if race in haplotypes[hap] %}
+                        <td>{{ haplotypes[hap][race] }}</td>
+                    {% else %}
+                        <td>0</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="results-div" id="haplotypes-pairs">
+        <button type="button" class="btn btn-secondary border border-dark" onclick="exportToCsv('haplotypes-pairs-table')">Export to CSV</button>
+        <div id="haplotypes-pairs-bars" class="bars-div"></div>
+        <table id="haplotypes-pairs-table" class="table results-table table-striped">
+            <tr>
+                <th></th>
+                <th>Haplotype 1</th>
+                <th>Haplotype 2</th>
+                <th>Genotype Frequency</th>
+                <th>Normalized</th>
+            </tr>
+            {% for pair in haplotypes_pairs %}
+            <tr>
+                <td>{{ pair[0] | int +1 }}</td>
+                <td>{{ pair[1] }}</td>
+                <td>{{ pair[2] }}</td>
+                <td>{{ pair[3] }}</td>
+                <td>{{ pair[4] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="results-div" id="genotypes">
+        <button type="button" class="btn btn-secondary border border-dark" onclick="exportToCsv('genotype-table')">Export to CSV</button>
+        <div id="genotype-bars" class="bars-div"></div>
+        <table id="genotype-table" class="table results-table table-striped">
+            <tr>
+                <th></th>
+                <th>Genotype</th>
+                <th>Genotype Frequency</th>
+                <th>Normalized</th>
+            </tr>
+            {% for gen in genotypes %}
+            <tr>
+                <td>{{ gen[0]|int + 1 }}</td>
+                <td>{{ gen[1] }}</td>
+                <td>{{ gen[2] }}</td>
+                <td>{{ gen[3] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+
+{% endblock %}

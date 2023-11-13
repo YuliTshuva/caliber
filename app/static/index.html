@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>Genotypes Imputation</title>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+        <div class="page-top">
+            <h1>Genotypes Imputation</h1>
+        </div>
+        <div class="form">
+            <form action="/impute" method="post">
+                <fieldset>
+                    <legend class="legend">gl-string</legend>
+                    <input type="text" class="gl-string allele-input" name="glstring" placeholder="gl string">
+                </fieldset>
+                <fieldset>
+                    <legend class="legend">allels</legend>
+                    <input type="text" class="allele-input" name="A1" placeholder="A1">
+                    <input type="text" class="allele-input" name="A2" placeholder="A2">
+                    <br>
+                    <input type="text" class="allele-input" name="B1" placeholder="B1">
+                    <input type="text" class="allele-input" name="B2" placeholder="B2">
+                    <br>
+                    <input type="text" class="allele-input" name="C1" placeholder="C1">
+                    <input type="text" class="allele-input" name="C2" placeholder="C2">
+                    <br>
+                    <input type="text" class="allele-input" name="DQB1_1" placeholder="DQB1_1">
+                    <input type="text" class="allele-input" name="DQB1_2" placeholder="DQB1_2">
+                    <br>
+                    <input type="text" class="allele-input" name="DRB1_1" placeholder="DRB1_1">
+                    <input type="text" class="allele-input" name="DRB1_2" placeholder="DRB1_2">
+                    <br>
+                </fieldset>
+                <br>
+                <input type="submit" value="impute">
+            </form>
+        </div>
+    </body>
+</html>

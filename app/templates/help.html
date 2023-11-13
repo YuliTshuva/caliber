@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/index.css" xmlns="http://www.w3.org/1999/html">
+<style>
+    .main-div {
+        margin: auto;
+        width: 80%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-top">
+    <h1>Help</h1>
+</div>
+<div class="container">
+    <br>
+    <h2>Instructions for running CALIBER</h2>
+    <br>
+    <h4>1. Specify input</h4>
+    <br>
+    <p style="text-indent: 40px;">
+        Input Format:
+    </p>
+    <p style="text-indent: 40px;">
+        There are 3 formats for inserting input:
+    </p>
+    <p style="text-indent: 80px;">
+        1. Protein sequences - A file in FASTA format of protein sequences (<a href="static/examples/input_example_seq.fasta" download>File example</a>) or directly insert the sequences in the text box.
+    </p>
+    <p style="text-indent: 80px;">
+        2. PDB IDs - A file in text/CSV format of PDB IDs (<a href="static/examples/input_example_pdb.txt" download>File example</a>) or directly insert the PDB IDs in the text box.
+    </p>
+    <p style="text-indent: 80px;">
+        3. PDB files - A zip file of PDB files (<a href="static/examples/pdb_files.zip" download>File example</a>).
+    </p>
+    <p style="text-indent: 40px;">
+        Model
+    </p>
+    <p style="text-indent: 40px;">
+        Choose the model for the prediction.
+    </p>
+    <p style="text-indent: 40px;">
+        The options are:
+    </p>
+    <p style="text-indent: 80px;">
+        1. BiLSTM
+    </p>
+    <p style="text-indent: 80px;">
+        2. GCN
+    </p>
+    <p style="text-indent: 80px;">
+        3. Boosting of both BiLSTM and GCN
+    </p>
+    <p style="text-indent: 40px;">
+        Epitope
+    </p>
+    <p style="text-indent: 40px;">
+        Choose the epitope sequences on which the model was trained on-
+    </p>
+    <p style="text-indent: 80px;">
+        Linear  (available only for BiLSTM model)
+    </p>
+    <p style="text-indent: 80px;">
+        Conformational
+    </p>
+    <p style="text-indent: 80px;">
+        Both linear and conformational (available only for BiLSTM Model and ESM-2 encoding)
+    </p>
+    <p style="text-indent: 40px;">
+        Encoding
+    </p>
+    <p style="text-indent: 40px;">
+        Choose the protein-encoding
+    </p>
+    <p style="text-indent: 80px;">
+        Random - amino-acid embedding with random initialization (available only for BiLSTM model)
+    </p>
+    <p style="text-indent: 80px;">
+        ESM-2
+    </p>
+    <p style="text-indent: 80px;">
+        EMS-IF1
+    </p>
+    <br>
+    <h4>2. Submit to prediction</h4>
+    <p>Click on the “Predict” button to start the prediction</p>
+    <br>
+    <h4>3. Results page</h4>
+    <p>The first results that will show are according to the default threshold. On this page after receiving the results, it is possible to choose another threshold, and the results will be displayed according to it.</p>
+</div>
+
+
+{% endblock %}

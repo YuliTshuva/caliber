@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/index.css">
+<script>
+    function submitForm() {
+        document.getElementById("file-form").submit()
+        document.getElementById("attached-file").value = '';
+    }
+
+    function changeSelect(selectId, inputId) {
+        const selectElement = document.getElementById(selectId);
+        const inputElement = document.getElementById(inputId);
+
+        // Get the selected option's value
+        const selectedValue = selectElement.options[selectElement.selectedIndex].value;
+
+        // Update the hidden input field's value
+        inputElement.value = selectedValue;
+    }
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+<div class="page-top">
+    <h1>Conformational And Linear B Cell Epitopes Prediction</h1>
+</div>
+<br>
+<div class="container text-center">
+    <form action="/impute-form" method="post" enctype="multipart/form-data" id="file-form" class="row g-3">
+        <input type="text" name="option" id="optionStr" value="Protein Sequences" hidden>
+        <input type="text" name="model" id="modelStr" value="BiLSTM" hidden>
+        <input type="text" name="encoding" id="encodingStr" value="Random" hidden>
+        <input type="text" name="epitope" id="epitopeStr" value="Linear" hidden>
+
+        <div class="col-md-7 text-bg-secondary p-3" style="border: 3px solid white;">
+            <div class="row">
+                <div class="col"></div>
+                <div class="col-md-4">
+                    <label for="option" class="form-label badge text-bg-dark" style="font-size: 18px;">Input format</label>
+                    <select id="option" class="form-select" onchange="changeSelect('option', 'optionStr');">
+                        <option value="Protein Sequences" selected>Protein Sequences</option>
+                        <option value="PDB IDs">PDB IDs</option>
+                        <option value="PDB file">PDB file</option>
+                    </select>
+                </div>
+                <div class="col"></div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col"></div>
+                <div class="col-6">
+                    <label for="attached-file" class="form-label badge text-bg-dark" style="font-size: 18px;">Append a file:</label>
+                    <input type="file" name="attached-file" id="attached-file" class="form-control">
+                </div>
+                <div class="col"></div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <label for="seq" class="form-label badge text-bg-dark" style="font-size: 18px;">Insert as string:</label>
+                    <textarea class="form-control" name="seq" id="seq" rows="5"
+                              placeholder="Enter protein sequences / PDB ID"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 text-bg-secondary p-3" style="border: 3px solid white;">
+            <label for="model" class="form-label badge text-bg-dark"  style="font-size: 18px;">Choose Model:</label>
+            <select id="model" class="form-select" onchange="changeSelect('model', 'modelStr');">
+                <option value="BiLSTM" selected>BiLSTM</option>
+                <option value="GCN">GCN</option>
+                <option value="Boosting">Boosting</option>
+            </select>
+            <br>
+            <br>
+            <label for="encoding" class="form-label badge text-bg-dark" style="font-size: 18px;">Choose Encoding:</label>
+            <select id="encoding" class="form-select" onchange="changeSelect('encoding', 'encodingStr');">
+                <option value="Random" selected>Random</option>
+                <option value="ESM-2">ESM-2</option>
+                <option value="ESM-IF1">ESM-IF1</option>
+            </select>
+            <br>
+            <br>
+            <label for="epitope" class="form-label badge text-bg-dark" style="font-size: 18px;">Choose Epitope:</label>
+            <select id="epitope" class="form-select" onchange="changeSelect('epitope', 'epitopeStr');">
+                <option value="Linear" selected>Linear</option>
+                <option value="Nonlinear">Conformational</option>
+                <option value="Both">Both</option>
+            </select>
+        </div>
+
+        <br>
+        <br>
+        <div class="col-md-12">
+            <button class="btn btn-dark bottom-submit" type="submit" tabindex="17">Predict</button>
+        </div>
+        <br>
+        <br>
+    </form>
+</div>
+{% endblock %}

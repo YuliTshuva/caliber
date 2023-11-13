@@ -1,0 +1,236 @@
+.page-top {
+    margin: auto;
+    text-align: center;
+    font-size: 1.5vw;
+    /* font-family: 'arial'; */
+    /* font-family: 'Fantasy'; */
+}
+
+.form {
+    margin: auto;
+    /* text-align: center; */
+    /* width: 40%; */
+}
+
+.form input[type=text] {
+    /* opacity: 100%; */
+    /* background: none; */
+    border: 1px black solid;
+    border-radius: 3px;
+}
+
+.allele-input[type=text] {
+    font-size: 1vw;
+    font-family: 'Calibri';
+    margin-bottom: 10px;
+    /* border: none; */
+    /* border-bottom: 1px solid black; */
+}
+
+.gl-string {
+    font-size: 1vw;
+    width: 50%;
+    height: 50px;
+}
+
+.legend {
+    font-size: 1.15vw;
+    /* font-family: 'Times New Roman'; */
+    font-family: 'arial';
+}
+
+fieldset {
+    border-radius: 10px;
+    border: 1px white;
+}
+
+.form-div {
+    vertical-align:top;
+    position: fixed;
+    width: 80%;
+    height: 65%;
+    left: 10%;
+    top: 25%;
+    font-size: 1vw;
+    background-color: rgb(240, 248, 255, 0.5);
+}
+
+.custom-div {
+    height: 400px; /* Adjust the desired height */
+    width: 90%;   /* Set the width to 90% of the screen width */
+    margin: 0 auto; /* Center the div horizontally */
+    background-color: #f0f0f0; /* Background color (optional) */
+    border: 1px solid #ccc; /* Border (optional) */
+}
+
+.hla-input {
+    margin: auto;
+    width: 100px;
+    font-size: 1vw;
+}
+
+.alleles-table {
+    width: 80%;
+    font-size: 1vw;
+    margin: auto;
+    text-align: center;
+}
+
+.alleles-table td {
+    padding-top: 3px;
+}
+
+input[type=text], select, textarea {
+    /* width: 100%; */
+    padding: 7px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    /*background-color: rgb(240, 248, 255, 0.8);*/
+  }
+
+.left-half {
+    margin: auto;
+    display: inline-block;
+    /* position: absolute; */
+    width: 40%;
+    padding: 10px;
+    margin-left: 50px;
+    /* left: 0%; */
+}
+
+.right-half {
+    margin: auto;
+    display: inline-block;
+    /* position: absolute; */
+    width: 40%;
+    padding: 10px;
+    /* left: 50%; */
+}
+
+
+select {
+    font-size: 1vw;
+    width: 50%;
+}
+
+.load-file-div {
+    float: left;
+    width: 18vw;
+    height: 40vh;
+    margin: 1%;
+    background-color: rgb(155, 155, 155, 0.3);
+    text-align: center;
+    vertical-align: middle; 
+}
+
+.load-file {
+    margin: auto;
+    background-color: darkseagreen;
+}
+
+.insert-no-file {
+    text-align: center;
+    float: right;
+    width: 78vw;
+    height: 40vh;
+    margin: 1%;
+    background-color: rgb(155, 155, 155, 0.3);   
+}
+
+.form-bottom-div {
+    width: 60vw;
+    margin: auto;
+    text-align: center;
+}
+
+.bottom-submit {
+    width: 30%;
+    font-size: 1vw;
+    margin-bottom: 8px;
+}
+
+.list-div {
+    height: 50px;
+    overflow-y: auto;
+}
+
+/* ------------------------------------------ */
+
+.multiselect {
+    width: 200px;
+    display: inline;
+    position: absolute;
+    z-index: 1000;
+}
+
+.selectBox {
+    position: relative;
+}
+
+.selectBox select {
+    width: 100%;
+    /* font-weight: bold; */
+}
+
+.overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+#checkboxes {
+    display: none;
+    border: 1px #dadada solid;
+    background-color: #dadada;
+    text-align: left;
+}
+
+#checkboxes label {
+    display: block;
+}
+
+#checkboxes label:hover {
+    background-color: #dadada;
+}
+
+input[type=checkbox] {
+    margin: 3px;
+}
+
+.race-table td {
+    padding: 3px;
+}
+
+.insert-no-file {
+    height: 340px;
+}
+.load-file-div {
+    height: 350px;
+}
+
+.error {
+    size: 300px;
+}
+
+/* ---------------------------------------------- */
+
+/* input[type=file]:focus + .file-dummy {
+    outline: 2px solid rgba(255,255,255,0.5);
+    outline: -webkit-focus-ring-color auto 5px;
+  }
+  
+input[type=file]:valid,
+.file-dummy {
+    border-color: rgba(0,255,0,0.4);
+    background-color: rgba(0,255,0,0.3);
+
+    .success {
+        display: inline-block;
+    }
+    .default {
+        display: none;
+    }
+} */

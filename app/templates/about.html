@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/index.css">
+<style>
+    .main-div {
+        margin: auto;
+        width: 80%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-top">
+    <h1>About</h1>
+</div>
+<br>
+<div class="container">
+    <p>
+        The CALIBER algorithm was developed by Sapir Israeli and Prof. Yoram Louzoun at Bar-Ilan University.
+        <br>
+        This website was implemented by Yuli  Tshuva.
+        <br>
+        A standalone version code is available at <a href="https://github.com/sapiris/epitope_b_cells_predictor">the GitHub repository</a>.
+        <br>
+        Visit <a href="https://yolo.math.biu.ac.il/">Prof. Louzoun's lab website</a> to further explore the lab's research domains.
+    </p>
+
+</div>
+
+{% endblock %}

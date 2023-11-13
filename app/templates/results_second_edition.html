@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/results.css">
+<link rel="stylesheet" href="/static/index.css">
+
+<script>
+    function submitForm() {
+        document.getElementById("threshold-form").submit()
+    }
+    function changeSelect(selectId, inputId) {
+        const selectElement = document.getElementById(selectId);
+        const inputElement = document.getElementById(inputId);
+
+        // Get the selected option's value
+        const selectedValue = selectElement.options[selectElement.selectedIndex].value;
+
+        // Update the hidden input field's value
+        inputElement.value = selectedValue;
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container text-center row">
+    <h1>Conformational And Linear B Cell Epitopes Prediction</h1>
+</div>
+<br>
+
+<div class="container text-center">
+    <form action="/update-threshold" method="post" enctype="multipart/form-data" id="threshold-form">
+        <input type="text" id="original_df_path" name="original_df_path" value="{{ original_df_path }}" hidden>
+        <input type="text" id="current_time" name="current_time" value="{{ current_time }}" hidden>
+        <input type="text" id="words_send2" name="words_send2" value="{{ words_send }}" hidden>
+        <input type="text" id="index" name="index" value="{{ index }}" hidden>
+
+<!--        <div class="row text-bg-secondary p-3">-->
+        <div class="row p-3">
+            <div class="col-md-8">
+                <label class="form-label badge text-bg-dark" style="font-size: 18px;">Output file:</label>
+                <a href="{{ original_df_path }}" download="model_results" class="badge rounded-pill bg-light"
+                   style="font-size: 18px; color: black;">model_results.csv</a>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label badge text-bg-dark" for="threshold" style="font-size: 18px;">Threshold:</label>
+                <input type="text" id="threshold" name="threshold" value="{{ threshold }}" style="width: 100px;">
+            </div>
+        </div>
+
+        <div class="row p-3">
+            <div class="col-md-8">
+                <label class="form-label badge text-bg-dark" style="font-size: 18px;">Custom file:</label>
+                <a href="{{ custom_df_path }}" download="sequence_model_results"
+                   class="badge rounded-pill bg-light" style="font-size: 18px; color: black;">
+                    sequence_model_results.fasta</a>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" tabindex="17">Update Threshold</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<br>
+<br>
+
+<div class="row">
+    <div class="col-md-9">
+<!--        <div class="custom-div" id="interactive-plot"></div>-->
+        <div class="container" id="interactive-plot"></div>
+    </div>
+    <div class="col-md-3 p-3">
+        <form action="/update-plot" method="post" enctype="multipart/form-data" id="protein-form">
+            <input type="text" name="protein-val" id="protein-val" value="{{ certain_word }}" hidden>
+            <input type="text" name="current_time_2" id="current_time_2" value="{{ current_time }}" hidden>
+            <input type="text" name="df_path" id="df_path" value="{{ original_df_path }}" hidden>
+            <input type="text" name="new_df_path" id="new_df_path" value="{{ custom_df_path }}" hidden>
+            <input type="text" name="threshold-val" id="threshold-val" value="{{ threshold }}" hidden>
+            <input type="text" name="words_send" id="words_send" value="{{ words_send }}" hidden>
+            <label for="protein" class="form-label" style="font-size: 18px;">Presented Protein:</label>
+            <select id="protein" class="form-select" onchange="changeSelect('protein', 'protein-val');">
+                {% for word in words %}
+                    {% if (word == certain_word) %}
+                        <option value="{{ word }}" selected style="color: green;">{{ word }}</option>
+                    {% else %}
+                        <option value="{{ word }}">{{ word }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <br>
+            <button type="submit" tabindex="17">Update Plot</button>
+        </form>
+    </div>
+</div>
+
+<!-- Include the Plotly JavaScript library -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<!-- JavaScript to render the Plotly plot -->
+<script>
+    // Ensure the document is ready before running JavaScript
+    document.addEventListener("DOMContentLoaded", function () {
+        // Retrieve the Plotly data from Flask (replace with your data)
+        var plotly_data = {{ plotly_data|safe }};
+
+        // Render the interactive plot in the div element
+        Plotly.newPlot('interactive-plot', plotly_data);
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W3JMMBHBBT"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-W3JMMBHBBT');
+    </script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="static/home.css">
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+
+
+    <style>
+        #table_split {
+            width: 100%;
+            table-layout: fixed;
+            white-space: nowrap;
+            margin: 0.1rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="" style="font-size:20px;color:white">Home <span
+                        class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="" style="font-size:20px;color:white">Example <span
+                        class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="" style="font-size:20px;color:white">Help <span
+                        class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="" style="font-size:20px;color:white">About <span
+                        class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="" style="font-size:20px;color:white">Races <span
+                        class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <p><a href="http://yolo.math.biu.ac.il/" target="_blank">
+        <img src="" style="height: 60px; width: auto; margin-bottom: -30%"></a></p>
+    </div>
+</nav>
+
+
+<br>
+<h1 style="font-size:40px;color: #40132a;text-align: center"><b>HLA Imputation</b></h1>
+<p style="text-align: center;size: 15px"> Before starting, it is recommended to read the explanations under "Help"</p>
+
+<form id="my-form" action="/impute" method="post" enctype=multipart/form-data>
+
+    <div class="row">
+        <div class="column left" style="background: rgba(105,94,108,0.9);text-align: center; border-color: white">
+            <h2 style="color: white;font-size:25px"><b>Insertion by File</b></h2>
+            <br><br>
+            <p style="font-size: 20px; color: white">Insert an input file.<br> See an example of a valid format<br>
+                under
+                the "Example" label</p>
+            <br><br>
+            <!--        <form id="my-form" action="" method=post enctype=multipart/form-data>-->
+            <input type=file name=the_file style="width: 300px;height: 80px;font-size: 20px;margin: 4px 40px ">
+        </div>
+
+        <div class="column right" style="background: rgba(154,154,161,0.9);">
+            <h2 style="text-align: center;color: white;font-size:25px"><b>Manual Insertion&nbsp;&nbsp;</b>
+            <a style="color: white;font-size:12px">(Before inserting, it is recommended to click the "Clear..." button)</a>
+            </h2>
+
+            <label for="gl_or_split" style="margin-left: 40px">Choose the insertion mode: </label>
+            <select id="gl_or_split" name="gl_or_split">
+                <option value="gl" selected="selected">Insertion by gl string</option>
+                <option value="separately">Insert separately</option>
+            </select>
+
+            <div class="container">
+                <div class="one" id="con1" style="background-color: #888088;">
+                    <p id="expla_gl" style="margin-left: 20px"><b>Insertion by gl string (see an example to a valid
+                        format
+                        of gl string under
+                        "Example"):</b></p>
+
+                    <input type="text" id="gl_string" name="glstring" style="width: 800px;margin-left: 20px">
+                </div>
+                <div class="two">
+                    <div class="three" id="con2" style="background-color: #9a9aa1; overflow-x:auto">
+                        <p id="expla_split" style="margin-left: 20px"><b>Insert separately:</b></p>
+
+                        <table class="table table-borderless" id="table_split">
+                            <tbody>
+                            <tr>
+                                <td>A1</td>
+                                <td><input type="text" id="K1" name="K1" style="width:60px" tabindex="1" disabled="true"></td>
+                                <td>B1</td>
+                                <td><input type="text" id="B1" name="B1" style="width:60px" tabindex="2" disabled="true"></td>
+                                <td>C1</td>
+                                <td><input type="text" id="C1" name="C1" style="width:60px" tabindex="3" disabled="true"></td>
+                                <td>DRB11</td>
+                                <td><input type="text" id="DRB1" name="DRB1_1" style="width:60px" tabindex="4" disabled="true"></td>
+                                <td>DQB11</td>
+                                <td><input type="text" id="DQB1" name="DQB1_1" style="width:60px" tabindex="5" disabled="true"></td>
+                            </tr>
+                            <tr>
+                                <td>A2</td>
+                                <td><input type="text" id="A2" name="A2" style="width:60px" disabled="true"></td>
+                                <td>B2</td>
+                                <td><input type="text" id="B2" name="B2" style="width:60px" disabled="true"></td>
+                                <td>C2</td>
+                                <td><input type="text" id="C2" name="C2" style="width:60px" disabled="true"></td>
+                                <td>DRB12</td>
+                                <td><input type="text" id="DRB2" name="DRB1_2" style="width:60px" disabled="true"></td>
+                                <td>DQB12</td>
+                                <td><input type="text" id="DQB2" name="DQB1_2" style="width:60px" disabled="true"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.getElementById('gl_or_split').addEventListener('change', function () {
+                    if (this.value == "gl") {
+                        document.getElementById("con1").style.background = "#888088";
+                        document.getElementById("con2").style.background = "#9a9aa1";
+                        document.getElementById('gl_string').disabled = false;
+                        document.getElementById('A1').disabled = true;
+                        document.getElementById('B1').disabled = true;
+                        document.getElementById('C1').disabled = true;
+                        document.getElementById('DRB1').disabled = true;
+                        document.getElementById('DQB1').disabled = true;
+                        document.getElementById('A2').disabled = true;
+                        document.getElementById('B2').disabled = true;
+                        document.getElementById('C2').disabled = true;
+                        document.getElementById('DRB2').disabled = true;
+                        document.getElementById('DQB2').disabled = true;
+
+                    } else {
+                        document.getElementById('gl_string').disabled = true;
+                        document.getElementById("con1").style.background = "#9A9AA1";
+                        document.getElementById("con2").style.background = "#888088";
+                        document.getElementById('A1').disabled = false;
+                        document.getElementById('B1').disabled = false;
+                        document.getElementById('C1').disabled = false;
+                        document.getElementById('DRB1').disabled = false;
+                        document.getElementById('DQB1').disabled = false;
+                        document.getElementById('A2').disabled = false;
+                        document.getElementById('B2').disabled = false;
+                        document.getElementById('C2').disabled = false;
+                        document.getElementById('DRB2').disabled = false;
+                        document.getElementById('DQB2').disabled = false;
+                    }
+                });
+            </script>
+
+            <hr style="background-color: #343333">
+            <div class="race_cont" style="font-size: 15px">
+                <div class="race_cont1">
+                    Optional: After insertion, you can add races of this family . For more details see "Races".
+                    <!--                    <label for="races">Choose a race:</label>-->
+                    <select id="races" name="races" style="margin-left: 20px">
+                        <optgroup label="AFA - African American">
+                            <option value="AAFA">AAFA (US)</option>
+                            <option value="AFB">AFB (US)</option>
+                            <option value="CARB">CARB (US)</option>
+                        </optgroup>
+                        <option value="AINDI">AINDI (US)</option>
+                        <option value="AISC">AISC (US)</option>
+                        <option value="ALANAM">ALANAM (US)</option>
+                        <option value="AMIND">AMIND (US)</option>
+
+                        <option value="CARHIS">CARHIS (US)</option>
+                        <option value="CARIBI">CARIBI (US)</option>
+                        <option value="HAWI">HAWI (US)</option>
+                        <option value="FILII">FILII (US)</option>
+                        <option value="KORI">KORI (US)</option>
+                        <option value="JAPI">JAPI (US)</option>
+                        <option value="MSWHIS">MSWHIS (US)</option>
+                        <option value="MENAFC">MENAFC (US)</option>
+                        <!--                        <option value="NAMER">NAMER (US)</option>-->
+                        <option value="NCHI">NCHI (US)</option>
+                        <option value="SCAHIS">SCAHIS (US)</option>
+                        <option value="SCAMB">SCAMB (US)</option>
+                        <option value="SCSEAI">SCSEAI (US)</option>
+                        <option value="VIET">VIET (US)</option>
+                        <option value="AFA">AFA (US)</option>
+                        <option value="API">API (US)</option>
+                        <option value="CAU">CAU (US)</option>
+                        <option value="HIS">HIS (US)</option>
+                        <option value="NAM">NAM (US)</option>
+                        <option value="Kavkaz">Kavkaz (IL)</option>
+                        <option value="Ashkenazi">Ashkenazi (IL)</option>
+                        <option value="Ethiopian">Ethiopian (IL)</option>
+                        <option value="Sephardi">Sephardi (IL)</option>
+                        <option value="Others">Others (IL)</option>
+                        <option value="Arab">Arab (IL)</option>
+                        <option value="all">All (IL)</option>
+                    </select>
+                    <button type="submit" name="submit_btn" value="add_race">Add
+                    </button>
+                </div>
+                <div class="race_cont2" style="margin-right: 30px">
+                    <div class="scroll_races"></div>
+                </div>
+
+            </div>
+
+
+        </div>
+        <!--</form>-->
+
+    </div>
+    </div>
+
+    <br>
+</form>
+<button type="submit" form="my-form" onclick="myFunction();" name="submit_btn" value="Results"
+        style="background-color: #7f0a2f;width:200px;border-radius: 7px;color: white;padding: 10px 15px;text-align: center;position: relative; left:40%;font-size: 25px;">
+    Results
+</button>
+
+<p id="txt_mes"
+   style="color: #40132a;text-align: center;font-size:20px;font-weight: 600;text-shadow: 4px 4px 8px white"></p>
+
+
+
+<script id="my_scr" my_rand="">
+
+    function myFunction() {
+        document.getElementById("txt_mes").innerHTML = "Analysis in process ...";
+        var x = document.getElementById("link_dl_output1");
+        var y = document.getElementById("link_dl_output2");
+        x.style.display = "none";
+        y.style.display = "none";
+
+    }
+
+    function remove_mes() {
+        document.getElementById("txt_mes").innerHTML = "";
+
+    }
+
+    function show_visual() {
+        var script_tag = document.getElementById('my_scr');
+        var rand_user1 = script_tag.getAttribute("my_rand");
+        var cur_adr = '../static/' + rand_user1 + '_1.png';
+        window.open(cur_adr, 'visualization', 'width=1200, height=600, left=300', false);
+        return false;
+    }
+
+</script>
+
+
+<p style="text-align: center; size: 20px"><b>Produced by: Ansbacher-Feldman Z, Israeli S and Louzoun Y (2020).
+    Family Imputation by GRIMM and GRAMM codes.</b></p>
+<hr style="background-color: #9e9e9e">
+<p style="text-align:center; font-size:15px">&copy; Louzoun-Lab 2020</p>
+
+
+</body>
+</html>

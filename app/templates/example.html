@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/index.css">
+<style>
+    .main-div {
+        margin: auto;
+        width: 80%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-top">
+    <h1>Example</h1>
+</div>
+<br>
+<br>
+<div class="container bg-secondary rounded-3 p-3 col-md-3">
+    <label class="form-label badge text-bg-dark">First Example:</label>
+    <a href="static/examples/input_example_pdb.txt" download="example1.txt"
+       class="badge rounded-pill bg-light" style="color: black;">Download First Example</a>
+    <br>
+    <label class="form-label badge text-bg-dark">Second Example:</label>
+    <a href="static/examples/input_example_seq.fasta" download="example2.fasta"
+        class="badge rounded-pill bg-light" style="color: black;">Download Second Example</a>
+    <br>
+    <label class="form-label badge text-bg-dark">Third Example:</label>
+    <a href="static/examples/pdb_files.zip" download="example3.zip"
+        class="badge rounded-pill bg-light" style="color: black;">Download Third Example</a>
+</div>
+<br>
+<br>
+<div class="container">
+    We are deeply sorry but there's no concrete example of usage for us to give at the moment.
+    <br>
+    We do our best efforts to create on and upload as soon as possible.
+</div>
+
+{% endblock %}
+
