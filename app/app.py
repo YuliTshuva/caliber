@@ -11,7 +11,6 @@ from imputations import plot_custom_plot, create_new_csv
 import uuid
 
 FOLDER_NAME = "epitope_b_cells_predictor"
-
 random_hex = uuid.uuid4().hex
 
 
@@ -21,36 +20,19 @@ def get_time():
 
 
 app = Flask(__name__, static_folder='static', template_folder="templates")
-
 app.config['UPLOAD_FOLDER'] = os.path.abspath("upload_folder")
-
-app.config["PERMANENT_SESSION_LIFETIME"] = datetime.timedelta(hours=1)
-
 app.config["SECRET_KEY"] = random_hex
 
 
 @app.route('/impute-form', methods=['POST'])
 def impute_form():
     try:
-        # get the input data from the form
         option = request.form.get("option")
-
-        # get the input data from the form
         model = request.form.get("model")
-
-        # get the input data from the form
         encoding = request.form.get("encoding")
-
-        # get the input data from the form
         epitope = request.form.get("epitope")
-
-        # get the input data from the form
         threshold = request.form.get("threshold", "")
-
-        # get the input data from the form
         input_string = request.form.get('seq', "")
-
-        # get the uploaded file from the request object
         file = request.files['attached-file']
 
         try:
@@ -107,7 +89,6 @@ def impute_form():
                                plotly_data=plotly_data, custom_df_path=new_df_path, original_df_path=original_df_path,
                                certain_word=proteins[0])
 
-    #render an error template if an exception occurs
     except Exception as e:
         traceback.print_exc()
         return render_template("error.html", active="", error=str(e))
@@ -190,16 +171,6 @@ def help():
 @app.route('/About', methods=['GET'])
 def about():
     return render_template("about.html", active="About")
-#
-#
-# @app.route('/experiments', methods=['GET', 'POST'])
-# def experiments():
-#     with open("static\plots_and_csvs\scores_plot_1698302896.858246.json", "r") as f:
-#         data = json.load(f)
-#     return render_template("results_second_edition.html", active="results",
-#                            plotly_data=data,
-#                            custom_df_path="static\plots_and_csvs\protein_epitope_upper_case1698302896.858246.csv",
-#                            original_df_path="static\plots_and_csvs\model_output1698302896.858246.csv")
 
 
 if __name__ == "__main__":
