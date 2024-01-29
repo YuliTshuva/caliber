@@ -35,6 +35,14 @@ def impute_form():
         input_string = request.form.get('seq', "")
         file = request.files['attached-file']
 
+        if ((model == "BiLSTM" and encoding == "ESM-IF1" and epitope == "Linear")
+                or (epitope == "Linear" and model != "BiLSTM")
+                or (epitope == "Both" and model in ["GCN", 'Boosting'])
+                or (epitope == "Both" and encoding != "ESM-2")
+                or (encoding == "Random" and model != "BiLSRM")
+                or (encoding == "Random" and epitope != "Linear")):
+            return render_template("error.html", active="", error="Not a valid combination.")
+
         try:
             float(threshold)
         except:

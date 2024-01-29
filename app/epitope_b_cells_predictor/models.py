@@ -9,6 +9,7 @@ from collections import OrderedDict
 import timeit
 import os
 
+
 class GCN(torch.nn.Module):
     def __init__(self, params, device):
         super().__init__()
@@ -16,11 +17,10 @@ class GCN(torch.nn.Module):
         # self.pep_embedding.weight.data[:, :10] = torch.tensor(model_embedd)
         # self.pep_embedding.weight.requires_grad = True
         self.device = device
-        self.conv1 = GCNConv(params["embedding_dim"], params["layer_size"] , normalize=True)  # num_node_features
+        self.conv1 = GCNConv(params["embedding_dim"], params["layer_size"], normalize=True)  # num_node_features
         self.conv_out = GCNConv(params["layer_size"], params["encoding_dim"], normalize=True)  # num_classes
         self.dropout_rate = params["dropout"]
         self.fc_1 = nn.Linear(params["encoding_dim"], 1)
-
 
     def forward(self, data):
         data = data.to(self.device)
@@ -35,10 +35,8 @@ class GCN(torch.nn.Module):
         x = self.fc_1(x)
         x = torch.sigmoid(x)
 
-        return x  
+        return x
 
-
-        
 
 class BiLSTM(nn.Module):
     def __init__(self, params, model_embedd, device):
@@ -54,7 +52,7 @@ class BiLSTM(nn.Module):
 
         padding = 8 if params["initialization"] == "Kidera+bio" else 0
         self.LSTM_cdr_encoder = nn.LSTM(
-            params["embedding_dim"]+ padding,
+            params["embedding_dim"] + padding,
             params["encoding_dim_lstm"],
             num_layers=params["lstm_num_layer"],
             batch_first=True,
@@ -71,7 +69,7 @@ class BiLSTM(nn.Module):
         if self.initialization in ["Kidera", "Kidera+bio", "Random"]:
             x = self.pep_embedding(x)
             if self.initialization == "Kidera+bio":
-                aa_prop =  dict_x["aa_prop"].to(self.device)
+                aa_prop = dict_x["aa_prop"].to(self.device)
                 x = torch.cat((x, aa_prop), dim=2)
 
         self.LSTM_cdr_encoder.flatten_parameters()
@@ -84,28 +82,29 @@ class BiLSTM(nn.Module):
         return x
 
 
-
 def predict_model(test_batches, kidera_embedding, params):
     device = params["device"]
-    model = BiLSTM(params, kidera_embedding, device).to(device) if params["model"] == "BiLSTM" else  GCN(params, device).to(device)
+    model = BiLSTM(params, kidera_embedding, device).to(device) if params["model"] == "BiLSTM" else GCN(params,
+                                                                                                        device).to(
+        device)
     model_path = params["BiLSTM_model"] if params["model"] == "BiLSTM" else params["GCN_model"]
     start = timeit.default_timer()
-    model.load_state_dict(torch.load(os.path.join("epitope_b_cells_predictor", model_path), map_location=torch.device('cpu')))
+    model.load_state_dict(
+        torch.load(os.path.join("epitope_b_cells_predictor", model_path), map_location=torch.device('cpu')))
     model.eval()
-    load_time = timeit.default_timer() -start
+    load_time = timeit.default_timer() - start
     print("load time", load_time)
 
+    dict_res = evaluation(test_batches, model, 0, device, params, predict=True)
 
-    dict_res = evaluation(test_batches, model, 0, device, params, predict = True )
-
-    return dict_res 
-
+    return dict_res
 
 
 def loss_func(sings_real, sings_pred):
     sings_pred = torch.squeeze(sings_pred)
     loss = F.binary_cross_entropy(sings_pred, torch.squeeze(sings_real))
     return loss
+
 
 def train_epoch(batches, model, optimizer, epoch, device, params):
     random.shuffle(batches)
@@ -122,7 +121,7 @@ def train_epoch(batches, model, optimizer, epoch, device, params):
         if params["model"] == "BiLSTM":
             out = out.reshape((out.shape[0] * out.shape[1], out.shape[2]))
         loss = loss_func(sign, out)
- 
+
         loss.backward(retain_graph=True)
         optimizer.step()
 
@@ -143,7 +142,7 @@ def train_epoch(batches, model, optimizer, epoch, device, params):
     return total_loss, auc
 
 
-def evaluation(batches, model, epoch, device, params, write_res = True, predict =  False):
+def evaluation(batches, model, epoch, device, params, write_res=True, predict=False):
     f_predict = open(params["predict_file"], "w")
     total_loss = 0
     total_signs_real, total_sign_pred = [], []
@@ -171,12 +170,11 @@ def evaluation(batches, model, epoch, device, params, write_res = True, predict 
             total_signs_real += real
             total_sign_pred += pred
 
-
         for i, score in enumerate(pred):
             if predict:
                 dict_res[f"{name_pro},{i + 1},{protein[i]}"] = score
             if write_res:
-                f_predict.write(f"{name_pro},{i+1},{protein[i]},{score}\n")
+                f_predict.write(f"{name_pro},{i + 1},{protein[i]},{score}\n")
     f_predict.close()
     if not predict:
         total_loss = total_loss / data_size
@@ -189,9 +187,10 @@ def evaluation(batches, model, epoch, device, params, write_res = True, predict 
 
 
 def train_model2(train_batches, val_batches, test_batches, kidera_embedding,
-                epochs, description, save_dir, params, device, early_stopping=True):
-
-    model = BiLSTM(params, kidera_embedding, device).to(device) if params["model"] == "BiLSTM" else  GCN(params, device).to(device)
+                 epochs, description, save_dir, params, device, early_stopping=True):
+    model = BiLSTM(params, kidera_embedding, device).to(device) if params["model"] == "BiLSTM" else GCN(params,
+                                                                                                        device).to(
+        device)
     optimizer = torch.optim.Adam(model.parameters(), lr=params["lr"], weight_decay=params["w_d"])
 
     train_loss_list = list()
@@ -203,15 +202,15 @@ def train_model2(train_batches, val_batches, test_batches, kidera_embedding,
     for epoch in range(epochs):
         print(f'Epoch: {epoch + 1} / {epochs}')
 
-        train_loss, train_auc = train_epoch(train_batches, model, optimizer, epoch +1, device, params)
+        train_loss, train_auc = train_epoch(train_batches, model, optimizer, epoch + 1, device, params)
         train_loss_list.append(train_loss)
         train_auc_list.append(train_auc)
         val_loss, val_auc = evaluation(val_batches, model, epoch + 1, device, params, False)  ##change to def eval
         val_loss_list.append(val_loss)
         val_auc_list.append(val_auc)
         test_loss, test_auc = evaluation(test_batches, model, epoch, device, params)  ##change to def eval 
-        #test_loss_list.append(test_loss)
-        #test_auc_list.append(test_auc)
+        # test_loss_list.append(test_loss)
+        # test_auc_list.append(test_auc)
         # val_auc_per_pro_list.append(val_auc_per_pro)
 
         if val_auc > max_val_auc:
@@ -223,23 +222,18 @@ def train_model2(train_batches, val_batches, test_batches, kidera_embedding,
         else:
             early_stopping_counter += 1
 
-
-    #plot_loss(train_loss_list, val_loss_list, test_loss_list, num_epochs, save_dir, "loss", description)
-    #plot_loss(train_auc_list, val_auc_list, test_auc_list, num_epochs, save_dir, "AUC", description)
+    # plot_loss(train_loss_list, val_loss_list, test_loss_list, num_epochs, save_dir, "loss", description)
+    # plot_loss(train_auc_list, val_auc_list, test_auc_list, num_epochs, save_dir, "AUC", description)
     torch.save(best_model.state_dict(), f"{save_dir}/model_{description}.pt")
-    #train_loss, train_auc = train_epoch(train_batches, best_model, optimizer, epoch, device)
+    # train_loss, train_auc = train_epoch(train_batches, best_model, optimizer, epoch, device)
     predict_file = params["predict_file"]
     predict_file = predict_file.split(".")
     params["predict_file"] = predict_file[0] + "_" + description + "_val" + predict_file[1]
     val_loss, val_auc = evaluation(val_batches, best_model, epoch, device, params, True)
     params["predict_file"] = predict_file[0] + "_" + description + "_test" + predict_file[1]
-    test_loss, test_auc = evaluation(test_batches, best_model, epoch, device, params, True)  
+    test_loss, test_auc = evaluation(test_batches, best_model, epoch, device, params, True)
     print(
         f"FINAL TEST best_model {description} : epoch {epoch + 1} | Test loss {test_loss} | Test auc {test_auc} "
         f"| val auc {val_auc}")
 
     return test_auc, train_auc, val_auc
-
-
-
-
